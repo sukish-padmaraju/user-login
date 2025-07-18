@@ -1,15 +1,18 @@
+// app/dashboard/page.tsx
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 
+const SECRET = process.env.JWT_SECRET!;
+
 export default async function Dashboard() {
-  const token = cookies().get('token')?.value;
-  let user = null;
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
+  let user: any = null;
 
   try {
-    user = jwt.verify(token, process.env.JWT_SECRET || 'supersecret');
-  } catch { }
-
-  if (!user) {
+    if (!token) throw new Error('No token');
+    user = jwt.verify(token, SECRET);
+  } catch (e) {
     return <div className="p-8 text-red-500">Unauthorized. Please log in.</div>;
   }
 
