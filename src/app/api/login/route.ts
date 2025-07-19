@@ -22,7 +22,10 @@ export async function POST(req: Request) {
   });
 
   // Create the response first
-  const response = NextResponse.json({ message: 'Login successful' });
+  const response = new NextResponse(JSON.stringify({ message: 'Login successful' }), {
+  status: 200,
+  headers: { 'Content-Type': 'application/json' },
+});
 
   // Then set the cookie on the response
   response.cookies.set('token', token, {
